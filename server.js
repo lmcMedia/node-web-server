@@ -2,6 +2,10 @@ const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
 
+// set the dynamic PORT variable for Heroku or 3000 locally
+// env variable can be found on Windows using SET in Command Prompt
+const port = process.env.PORT || 3000;
+
 var app = express();
 
 // setup partials
@@ -39,7 +43,7 @@ app.use((req, res, next)=>{
 app.use(express.static(__dirname + '/public'));
 
 // =======================================================================
-// new helper function
+// new helper functions
 hbs.registerHelper('getCurrentYear', () => {
   return new Date().getFullYear()
 });
@@ -48,6 +52,8 @@ hbs.registerHelper('screamIt', (text) => {
   return text.toUpperCase();
 });
 
+// =======================================================================
+// routes
 app.get('/', (req, res) => {
   res.render('home.hbs', {
     pageTitle: 'Home Page',
@@ -68,6 +74,8 @@ app.get('/bad', (req, res) => {
   })
 });
 
-app.listen(3000, ()=> {
-  console.log('Server is up on port 3000');
+// =======================================================================
+// needs to be dynamic for Heroku
+app.listen(port, ()=> {
+  console.log(`Server is up on port ${port}`);
 });
